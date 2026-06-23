@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+
+# Tunge kilde-videoer (selve GIF-en committes, ikke .mov-en)
+*.mov
+*.mp4
