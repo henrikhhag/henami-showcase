@@ -1,10 +1,10 @@
-# Arkitektur
+# Architecture
 
-Et teknisk dypdykk i hvordan henami er bygget.
+A technical deep dive into how henami is built.
 
-## Oversikt
+## Overview
 
-henami består av to klienter som deler én backend:
+henami consists of two clients sharing a single backend:
 
 ```
 ┌─────────────────┐     ┌─────────────────┐
@@ -17,40 +17,34 @@ henami består av to klienter som deler én backend:
          ┌───────────────────────┐
          │       Supabase        │
          │  Auth · Postgres ·    │
-         │  RLS · Edge Functions │
-         └───────────┬───────────┘
-                     ▼
-            ┌─────────────────┐
-            │ Anthropic Claude│
-            └─────────────────┘
+         │   Row-Level Security  │
+         └───────────────────────┘
 ```
 
 ## Frontend (web)
 
-- **React 19 + Vite** – rask HMR i utvikling, optimalisert produksjonsbygg.
-- **Kodesplitting** – hver side lastes som sin egen chunk via `React.lazy`. Spesielt viktig for tunge avhengigheter som Mapbox (kart) og Recharts (grafer), så de ikke lastes ned før man faktisk besøker siden.
-- **Ruting** – React Router v7, all ruting bak en auth-gate.
-- **Tema** – et eget tema-system basert på CSS-variabler på `<html>`. Lar brukeren tilpasse farger live, lagret i `localStorage`.
+- **React 19 + Vite** — fast HMR in development, optimized production build.
+- **Code splitting** — every page loads as its own chunk via `React.lazy`. Especially important for heavy dependencies like Mapbox (maps) and Recharts (charts), so they aren't downloaded until you actually visit the page.
+- **Routing** — React Router v7, all routing behind an auth gate.
+- **Theming** — a custom theme system based on CSS variables on `<html>`. Lets the user customize colors live, stored in `localStorage`.
 
-## Mobil (iOS)
+## Mobile (iOS)
 
-- **React Native + Expo (SDK 54)** med **Expo Router** for filbasert ruting.
-- Gjenbruker ren forretningslogikk (dato-hjelpere, beregninger) fra web, men har egne UI-komponenter (`View`/`Text` i stedet for DOM).
-- Auth-session lagres i `AsyncStorage`; bygges og distribueres via EAS / TestFlight.
+- **React Native + Expo (SDK 54)** with **Expo Router** for file-based routing.
+- Reuses pure business logic (date helpers, calculations) from web, but has its own UI components (`View`/`Text` instead of DOM).
+- The auth session is stored in `AsyncStorage`; built and distributed via EAS / TestFlight.
 
 ## Backend (Supabase)
 
-- **Postgres** med **row-level security** på alle tabeller. Mønsteret er `auth.uid() = bruker_id`, så hver bruker kun ser sine egne rader.
-- **Deling** – funksjoner som delt kalender og felles økonomi løses med egne `*_deling`-tabeller, slik at man kun eksponerer det man eksplisitt deler.
-- **Trigger** – ny bruker oppretter automatisk en profil-rad.
-- **Edge Functions (Deno)** – server-side funksjoner som henter markedsdata (RSS + Oslo Børs) og kaller Anthropic Claude for å generere markedsanalyse. Den ene kjører på forespørsel fra klienten, den andre på timeplan med service-role-nøkkel.
+- **Postgres** with **row-level security** on every table. The pattern is `auth.uid() = bruker_id`, so each user only sees their own rows.
+- **Sharing** — features like a shared calendar and joint finances are handled with dedicated `*_deling` (sharing) tables, so you only ever expose what you explicitly share.
+- **Trigger** — a new user automatically gets a profile row created.
 
-## Hvorfor disse valgene?
+## Why these choices?
 
-| Valg | Begrunnelse |
+| Choice | Reasoning |
 |---|---|
-| Supabase | Auth, database og serverless-funksjoner i én pakke – rask å bygge på som soloutvikler |
-| RLS i databasen | Sikkerhet håndheves i databasen, ikke i klientkoden – vanskeligere å omgå |
-| Expo (ikke bare React Native CLI) | TestFlight/App Store-distribusjon via EAS uten lokal Xcode-konfigurasjon |
-| CSS-variabler for tema | Live fargebytte uten re-render av React-treet |
-| Edge functions for AI | API-nøkkelen holdes server-side, aldri eksponert i klienten |
+| Supabase | Auth, database and serverless functions in one package — fast to build on as a solo developer |
+| RLS in the database | Security is enforced in the database, not in client code — harder to bypass |
+| Expo (not just React Native CLI) | TestFlight/App Store distribution via EAS without local Xcode configuration |
+| CSS variables for theming | Live color switching without re-rendering the React tree |

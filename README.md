@@ -2,7 +2,7 @@
 
 # henami
 
-**Et personlig dashboard for økonomi, kalender, trening, kosthold og reise – på web og iOS.**
+**A personal dashboard for budgeting, calendar, training, nutrition and travel — on web and iOS.**
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
@@ -10,41 +10,40 @@
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
 [![Vercel](https://img.shields.io/badge/Vercel-deployed-000000?logo=vercel&logoColor=white)](https://vercel.com)
 
-![henami i bruk](docs/screenshots/hero.gif)
+**English** · [🇳🇴 Norsk](README.no.md)
+
+![henami in action](docs/screenshots/hero.gif)
 
 </div>
 
-> **Om dette repoet:** Dette er en _presentasjon_ av prosjektet henami. Selve kildekoden er privat – her finner du beskrivelse, skjermbilder, arkitektur og noen utvalgte kodebiter.
+> **About this repo:** This is a _showcase_ of the henami project. The source code is private — here you'll find a description, screenshots, architecture and a few selected code snippets.
 
 ---
 
-## ✨ Hva er henami?
+## ✨ What is henami?
 
-henami er en personlig produktivitets-app jeg har bygget fra bunnen av. Den samler det jeg ellers ville brukt fem ulike apper til – budsjett, kalender, treningsdagbok, måltidsplanlegging og reisekart – i ett sammenhengende, tilpassbart dashboard bak innlogging.
+henami is a personal productivity app I built from scratch. It brings together what I'd otherwise use five separate apps for — budgeting, calendar, training log, meal planning and a travel map — into one cohesive, customizable dashboard behind login.
 
-Prosjektet finnes i to varianter som deler **samme backend**:
-- **Web** – React 19 + Vite, deployet på Vercel
-- **iOS** – React Native + Expo, samme data via Supabase
+The project comes in two variants that share the **same backend**:
+- **Web** — React 19 + Vite, deployed on Vercel
+- **iOS** — React Native + Expo, same data via Supabase
 
 ---
 
-## 🧩 Funksjoner
+## 🧩 Features
 
-| Modul | Beskrivelse |
+| Module | Description |
 |---|---|
-| 🏠 **Forside** | Tilpassbart dashboard med nøkkeltall, dagens hendelser, vaner og snarveier |
-| 💰 **Økonomi** | Budsjett med kategorier/grupper, abonnement, kontoer og delt felles-økonomi. Autolagring. |
-| 📅 **Kalender** | Måneds­visning, hendelser over flere dager, vaner, mål, dagbok og refleksjon |
-| 🏋️ **Trening** | Treningsperioder, programmer per uke, øktlogging og statistikk |
-| 🥗 **Kosthold** | Måltidsplan per uke + handleliste |
-| ✈️ **Reise** | Interaktivt verdenskart (Mapbox) over besøkte land og fjellturer |
-| 🎴 **Flashcards** | Egne kortstokker for repetisjon |
-| 📈 **Marked** | AI-generert markedsanalyse av egen portefølje (Anthropic Claude) |
+| 🏠 **Home** | Customizable dashboard with key figures, today's events, habits and shortcuts |
+| 💰 **Finances** | Budget with categories/groups, subscriptions, accounts and shared joint finances. Autosave. |
+| 📅 **Calendar** | Month view, multi-day events, habits, goals, journal and reflection |
+| 🏋️ **Training** | Training cycles, weekly programs, session logging and stats |
+| 🥗 **Nutrition** | Weekly meal plan + shopping list |
+| ✈️ **Travel** | Interactive world map (Mapbox) of visited countries and hikes |
 
 <div align="center">
 
-<!-- Legg inn 3–6 skjermbilder her -->
-| Forside | Økonomi | Kalender |
+| Home | Finances | Calendar |
 |---|---|---|
 | ![](docs/screenshots/forside.png) | ![](docs/screenshots/okonomi.png) | ![](docs/screenshots/kalender.png) |
 
@@ -55,21 +54,20 @@ Prosjektet finnes i to varianter som deler **samme backend**:
 ## 🛠️ Tech stack
 
 **Frontend (web):** React 19 · Vite · React Router v7 · Recharts · Mapbox GL · lucide-react
-**Mobil:** React Native · Expo · Expo Router
-**Backend:** Supabase (Postgres · Auth · Row-Level Security · Edge Functions i Deno)
-**AI:** Anthropic Claude (markedsanalyse via edge functions)
+**Mobile:** React Native · Expo · Expo Router
+**Backend:** Supabase (Postgres · Auth · Row-Level Security)
 **Hosting:** Vercel (web) · EAS / TestFlight (iOS)
 
-Se [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for et teknisk dypdykk.
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a technical deep dive.
 
 ---
 
-## 💡 Utvalgte kodebiter
+## 💡 Selected code snippets
 
-Et par ting jeg er fornøyd med fra kodebasen.
+A couple of things I'm happy with from the codebase.
 
-### Tilpassbart tema via CSS-variabler
-Hele appen henter farger fra CSS-variabler på `<html>`, så brukeren kan overstyre hver enkelt farge live – uten å re-rendre React-treet.
+### Customizable theming via CSS variables
+The entire app pulls its colors from CSS variables on `<html>`, so the user can override any individual color live — without re-rendering the React tree.
 
 ```js
 useEffect(() => {
@@ -81,48 +79,44 @@ useEffect(() => {
 }, [theme, customColors])
 ```
 
-### Defensiv autolagring i budsjettet
-Budsjettet lagrer automatisk, men en naiv implementasjon kunne slettet en hel måneds rader hvis en henting feilet. Løsningen er en «sikkerhetslås»: lagring er kun tillatt når dataene i state beviselig ble lastet for nøyaktig den måneden man står på.
+### Defensive autosave in the budget
+The budget saves automatically, but a naive implementation could wipe an entire month's rows if a fetch failed. The fix is a "safety lock": saving is only allowed when the data in state was provably loaded for exactly the month you're on.
 
 ```js
-// Lagring er KUN lov når dataene i state beviselig tilhører måneden vi står på.
-// Hindrer at en feilet/tom henting eller et raskt måned-bytte sletter ekte rader.
-if (lastetNøkkel.current !== `${måned}-${år}`) return
+// Saving is ONLY allowed when the data in state provably belongs to the
+// month we're on. Prevents a failed/empty fetch or a quick month switch
+// from deleting real rows.
+if (lastetNøkkel.current !== `${month}-${year}`) return
 ```
 
-### Samme backend, to klienter
-Web og iOS deler én Supabase-database. All tilgang styres av row-level security (`auth.uid() = bruker_id`), så hver bruker kun ser sine egne rader – og deling skjer via egne `*_deling`-tabeller.
+### Same backend, two clients
+Web and iOS share a single Supabase database. All access is governed by row-level security (`auth.uid() = bruker_id`), so each user only sees their own rows — and sharing happens through dedicated `*_deling` (sharing) tables.
 
 ---
 
-## 📐 Arkitektur i korte trekk
+## 📐 Architecture at a glance
 
 ```mermaid
 flowchart TD
-    subgraph Klienter
+    subgraph Clients
         Web["🌐 Web · React + Vite"]
         iOS["📱 iOS · React Native + Expo"]
     end
     subgraph Supabase
         Auth["🔑 Auth"]
         DB[("🗄️ Postgres + RLS")]
-        Fn["⚡ Edge Functions · Deno"]
     end
-    Anthropic["🤖 Anthropic Claude"]
 
     Web --> Auth
     iOS --> Auth
     Web --> DB
     iOS --> DB
-    Web --> Fn
-    Fn --> Anthropic
-    Fn --> DB
 ```
 
 ---
 
 <div align="center">
 
-Bygget av [Henrik Hagerup](https://github.com/henrikhhag) · Kildekode privat
+Built by [Henrik Hagerup](https://github.com/henrikhhag) · Source code private
 
 </div>
