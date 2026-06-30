@@ -22,7 +22,7 @@
 
 ## ✨ Hva er henami?
 
-henami er en personlig produktivitets-app jeg har bygget fra bunnen av. Den samler det jeg ellers ville brukt fem ulike apper til – budsjett, kalender, treningsdagbok, måltidsplanlegging og reisekart – i ett sammenhengende, tilpassbart dashboard bak innlogging.
+henami er en personlig produktivitets-app jeg har bygget fra bunnen av. Den samler det jeg ellers ville brukt fem ulike apper til – budsjett, kalender, treningsdagbok, måltidsdagbok og reisekart – i ett sammenhengende, tilpassbart dashboard bak innlogging.
 
 Prosjektet finnes i to varianter som deler **samme backend**:
 - **Web** – React 19 + Vite, deployet på Vercel
@@ -37,8 +37,8 @@ Prosjektet finnes i to varianter som deler **samme backend**:
 | 🏠 **Forside** | Tilpassbart dashboard med nøkkeltall, dagens hendelser, vaner og snarveier |
 | 💰 **Økonomi** | Budsjett med kategorier/grupper, abonnement, kontoer og delt felles-økonomi. Autolagring. |
 | 📅 **Kalender** | Måneds­visning, hendelser over flere dager, vaner, mål, dagbok og refleksjon |
-| 🏋️ **Trening** | Treningsperioder, programmer per uke, øktlogging og statistikk |
-| 🥗 **Kosthold** | Måltidsplan per uke + handleliste |
+| 🏋️ **Trening** | Treningsperioder, programmer per uke, øktlogging og statistikk koblet opp mot Strava |
+| 🥗 **Kosthold** | Måltidsdagbok per uke og dag + handleliste |
 | ✈️ **Reise** | Interaktivt verdenskart (Mapbox) over besøkte land og fjellturer |
 
 <div align="center">
